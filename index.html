@@ -29,8 +29,7 @@
 
         .unknown-message {
             color: red; /* Couleur du message d'inconnu */
-            font-weight: normal; /* Mettre le message en normal */
-            font-size: 18px; /* Taille de la police pour le message inconnu */
+            font-size: 18px; /* Taille de la police pour le message introuvable */
         }
     </style>
 </head>
@@ -45,7 +44,7 @@
 
         // Fonction pour exécuter la recherche
         function executeSearch() {
-            const searchTerm = $('#search').val().toLowerCase();
+            const searchTerm = $('#search').val().toLowerCase().trim(); // Récupérer et nettoyer le terme de recherche
             $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Lexique?key=${API_KEY}`, function(data) {
                 const rows = data.values || [];
                 const results = [];
@@ -56,7 +55,9 @@
                         if (cell) {
                             const cellContent = cell.toLowerCase();
                             const wordBeforeColon = cellContent.split(':')[0].trim(); // Récupérer la partie avant le ':'
-                            if (wordBeforeColon.includes(searchTerm)) {
+
+                            // Vérifier si le mot avant le ':' correspond exactement au terme de recherche
+                            if (wordBeforeColon === searchTerm) {
                                 results.push(cell); // Ne garder que la cellule concernée
                             }
                         }
@@ -67,7 +68,7 @@
                 if (results.length > 0) {
                     $('#results').html(results.join('<br><br>')); // Ajoute un espace entre les résultats
                 } else {
-                    $('#results').html('<span class="unknown-message">Mot inconnu, vous pouvez l\'ajouter.</span>');
+                    $('#results').html('<span class="unknown-message">Mot introuvable, n\'hésitez pas à l\'ajouter.</span>');
                 }
             });
         }
