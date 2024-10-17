@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche dans le Lexique</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Recherche Lexique</h1>
+    <input type="text" id="search" placeholder="Cherchez un mot...">
+    <button id="searchBtn">Rechercher</button>
+    <div id="results"></div>
+
+    <script>
+        const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw'; // Remplacez par votre ID de feuille
+        const API_KEY = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE'; // Remplacez par votre clé API
+
+        $('#searchBtn').click(function() {
+            const searchTerm = $('#search').val().toLowerCase();
+            $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Lexique?key=${API_KEY}`, function(data) {
+                const rows = data.values || [];
+                const results = rows.filter(row => row[0].toLowerCase().includes(searchTerm));
+                $('#results').html(results.map(row => row.join(': ')).join('<br>'));
+            });
+        });
+    </script>
+</body>
+</html>
