@@ -20,10 +20,14 @@
                 const rows = data.values || [];
                 const results = [];
 
-                // Parcourir chaque ligne et ne garder que les résultats correspondant à la cellule spécifique (ex: la première cellule)
+                // Parcourir chaque ligne et ne garder que les résultats correspondant à la partie avant les deux-points
                 rows.forEach(row => {
-                    if (row[0] && row[0].toLowerCase().includes(searchTerm)) {
-                        results.push(row[0]); // Ne garder que la cellule concernée
+                    if (row[0]) {
+                        const cellContent = row[0].toLowerCase();
+                        const wordBeforeColon = cellContent.split(':')[0].trim(); // Récupérer la partie avant le ':'
+                        if (wordBeforeColon.includes(searchTerm)) {
+                            results.push(row[0]); // Ne garder que la cellule concernée
+                        }
                     }
                 });
 
