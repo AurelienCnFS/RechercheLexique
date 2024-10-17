@@ -18,24 +18,25 @@
         const lexicon = {
             "application :": "Définition de l'application.",
             "appli :": "Abréviation pour application.",
-            "chaîne :": "Une suite d'éléments.",
-            // Ajoutez d'autres mots et définitions ici
+            "Chine :": "Pays d'Asie.",
+            "Chat :": "Animal domestique.",
+            "Chien :": "Autre animal domestique."
+            // Ajoutez d'autres définitions si nécessaire
         };
 
         function searchLexicon() {
-            const input = document.getElementById("searchInput").value.toLowerCase();
-            const resultsDiv = document.getElementById("results");
-            resultsDiv.innerHTML = "";
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = ''; // Efface les résultats précédents
 
-            for (const word in lexicon) {
-                const searchWord = word.toLowerCase().replace(" :", ""); // Ignore le caractère ":"
-                if (searchWord === input) {
-                    resultsDiv.innerHTML = `<p>${word}</p>`; // Affiche uniquement la cellule concernée
-                    return; // Affiche un seul résultat
+            for (const key in lexicon) {
+                const searchKey = key.toLowerCase().split(':')[0]; // Mot avant le ':'
+                const searchDefinition = lexicon[key].toLowerCase(); // Définition en minuscules
+
+                if (searchKey.includes(input) || searchDefinition.includes(input)) {
+                    resultsDiv.innerHTML += `<p>${key} ${lexicon[key]}</p>`; // Affiche uniquement la cellule concernée
                 }
             }
-
-            resultsDiv.innerHTML = "<p>Aucun résultat trouvé.</p>";
         }
     </script>
 </body>
