@@ -30,7 +30,7 @@
             for (const word in lexicon) {
                 const searchWord = word.toLowerCase().replace(" :", ""); // Ignore le caractère ":"
                 if (searchWord === input) {
-                    resultsDiv.innerHTML = `<p><strong>${word}</strong> ${lexicon[word]}</p>`;
+                    resultsDiv.innerHTML = `<p>${word}</p>`; // Affiche uniquement la cellule concernée
                     return; // Affiche un seul résultat
                 }
             }
