@@ -56,9 +56,9 @@
                             const cellContent = cell.toLowerCase();
                             const wordBeforeColon = cellContent.split(':')[0].trim(); // Récupérer la partie avant le ':'
                             
-                            // Vérifier si le terme de recherche correspond à un mot entier dans wordBeforeColon
+                            // Vérifier si le terme de recherche correspond à un mot entier ou à une combinaison de mots
                             const words = wordBeforeColon.split(' '); // Séparer en mots
-                            if (words.includes(searchTerm)) {
+                            if (searchTerm.split(' ').every(term => words.includes(term))) {
                                 results.push(cell); // Ne garder que la cellule concernée
                             }
                         }
