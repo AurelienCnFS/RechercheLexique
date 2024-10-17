@@ -4,40 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recherche dans le Lexique</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        #results { margin-top: 20px; }
-    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Recherche dans le Lexique</h1>
-    <input type="text" id="searchInput" placeholder="Rechercher un mot..." onkeyup="searchLexicon()">
+    <h1>Recherche Lexique</h1>
+    <input type="text" id="search" placeholder="Cherchez un mot...">
+    <button id="searchBtn">Rechercher</button>
     <div id="results"></div>
-
     <script>
-        const lexicon = {
-            "application :": "Définition de l'application.",
-            "appli :": "Abréviation pour application.",
-            "Chine :": "Pays d'Asie.",
-            "Chat :": "Animal domestique.",
-            "Chien :": "Autre animal domestique."
-            // Ajoutez d'autres définitions si nécessaire
-        };
+        const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw'; // Remplacez par votre ID de feuille
+        const API_KEY = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE'; // Remplacez par votre clé API
+        $('#searchBtn').click(function() {
+            const searchTerm = $('#search').val().toLowerCase();
+            $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Lexique?key=${API_KEY}`, function(data) {
+                const rows = data.values || [];
+                const results = [];
 
-        function searchLexicon() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = ''; // Efface les résultats précédents
+                // Parcourir chaque ligne et ne garder que les résultats correspondant à la cellule spécifique (ex: la première cellule)
+                rows.forEach(row => {
+                    if (row[0] && row[0].toLowerCase().includes(searchTerm)) {
+                        results.push(row[0]); // Ne garder que la cellule concernée
+                    }
+                });
 
-            for (const key in lexicon) {
-                const searchKey = key.toLowerCase().split(':')[0]; // Mot avant le ':'
-                const searchDefinition = lexicon[key].toLowerCase(); // Définition en minuscules
-
-                if (searchKey.includes(input) || searchDefinition.includes(input)) {
-                    resultsDiv.innerHTML += `<p>${key} ${lexicon[key]}</p>`; // Affiche uniquement la cellule concernée
-                }
-            }
-        }
+                // Afficher les résultats
+                $('#results').html(results.join('<br>'));
+            });
+        });
     </script>
 </body>
 </html>
