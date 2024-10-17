@@ -23,8 +23,8 @@
 
         /* Styles pour les résultats */
         #results {
-            margin-top: 45px; /* Espacement au-dessus des résultats */
-            font-size: 20px; /* Taille de la police pour les résultats */
+            margin-top: 20px; /* Espacement au-dessus des résultats */
+            font-size: 18px; /* Taille de la police pour les résultats */
         }
 
         .unknown-message {
@@ -65,9 +65,9 @@
 
                 // Afficher les résultats ou un message d'inconnu
                 if (results.length > 0) {
-                    $('#results').html(results.join('<br>'));
+                    $('#results').html(results.join('<br><br>')); // Ajoute un espace entre les résultats
                 } else {
-                    $('#results').html('<span class="unknown-message">Mot absent mais n\'hésiter pas à l\'ajouter.</span>');
+                    $('#results').html('<span class="unknown-message">Mot inconnu, vous pouvez l\'ajouter.</span>');
                 }
             });
         }
