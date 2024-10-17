@@ -54,10 +54,10 @@
                     row.forEach(cell => {
                         if (cell) {
                             const cellContent = cell.toLowerCase();
-                            const wordsBeforeColon = cellContent.split(':')[0].trim().split(' '); // Récupérer les mots avant le ':'
+                            const wordBeforeColon = cellContent.split(':')[0].trim(); // Récupérer la partie avant le ':'
 
-                            // Vérifier si l'un des mots avant le ':' correspond exactement au terme de recherche
-                            if (wordsBeforeColon.includes(searchTerm)) {
+                            // Vérifier si le terme de recherche est inclus dans le mot avant le ':'
+                            if (wordBeforeColon.includes(searchTerm)) {
                                 results.push(cell); // Ne garder que la cellule concernée
                             }
                         }
