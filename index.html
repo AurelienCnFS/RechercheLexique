@@ -72,13 +72,15 @@
                     $('#results').html('<span class="unknown-message">Mot introuvable, n\'hésitez pas à l\'ajouter.</span>');
                 }
                 
-                // Vider la barre de recherche
-                $('#search').val('');
+                // Vider la barre de recherche après l'affichage des résultats
+                $('#search').val(''); // Réinitialiser le champ de recherche ici
             });
         }
 
         // Écouteur d'événements pour le bouton de recherche
-        $('#searchBtn').click(executeSearch);
+        $('#searchBtn').click(function() {
+            executeSearch();
+        });
 
         // Écouteur d'événements pour la touche "Entrée" dans le champ de recherche
         $('#search').keydown(function(event) {
