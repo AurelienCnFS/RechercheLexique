@@ -14,21 +14,24 @@
     <script>
         const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw'; // Remplacez par votre ID de feuille
         const API_KEY = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE'; // Remplacez par votre clé API
+
         $('#searchBtn').click(function() {
             const searchTerm = $('#search').val().toLowerCase();
             $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Lexique?key=${API_KEY}`, function(data) {
                 const rows = data.values || [];
                 const results = [];
 
-                // Parcourir chaque ligne et ne garder que les résultats correspondant à la partie avant les deux-points
+                // Parcourir chaque ligne
                 rows.forEach(row => {
-                    if (row[0]) {
-                        const cellContent = row[0].toLowerCase();
-                        const wordBeforeColon = cellContent.split(':')[0].trim(); // Récupérer la partie avant le ':'
-                        if (wordBeforeColon.includes(searchTerm)) {
-                            results.push(row[0]); // Ne garder que la cellule concernée
+                    row.forEach(cell => {
+                        if (cell) {
+                            const cellContent = cell.toLowerCase();
+                            const wordBeforeColon = cellContent.split(':')[0].trim(); // Récupérer la partie avant le ':'
+                            if (wordBeforeColon.includes(searchTerm)) {
+                                results.push(cell); // Ne garder que la cellule concernée
+                            }
                         }
-                    }
+                    });
                 });
 
                 // Afficher les résultats
