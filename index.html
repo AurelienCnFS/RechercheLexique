@@ -4,26 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recherche dans le Lexique</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #results { margin-top: 20px; }
+    </style>
 </head>
 <body>
-    <h1>Recherche Lexique</h1>
-    <input type="text" id="search" placeholder="Cherchez un mot...">
-    <button id="searchBtn">Rechercher</button>
+    <h1>Recherche dans le Lexique</h1>
+    <input type="text" id="searchInput" placeholder="Rechercher un mot..." onkeyup="searchLexicon()">
     <div id="results"></div>
 
     <script>
-        const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw'; // Remplacez par votre ID de feuille
-        const API_KEY = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE'; // Remplacez par votre clé API
+        const lexicon = {
+            "application :": "Définition de l'application.",
+            "appli :": "Abréviation pour application.",
+            "chaîne :": "Une suite d'éléments.",
+            // Ajoutez d'autres mots et définitions ici
+        };
 
-        $('#searchBtn').click(function() {
-            const searchTerm = $('#search').val().toLowerCase();
-            $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Lexique?key=${API_KEY}`, function(data) {
-                const rows = data.values || [];
-                const results = rows.filter(row => row[0].toLowerCase().includes(searchTerm));
-                $('#results').html(results.map(row => row.join(': ')).join('<br>'));
-            });
-        });
+        function searchLexicon() {
+            const input = document.getElementById("searchInput").value.toLowerCase();
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
+
+            for (const word in lexicon) {
+                const searchWord = word.toLowerCase().replace(" :", ""); // Ignore le caractère ":"
+                if (searchWord === input) {
+                    resultsDiv.innerHTML = `<p><strong>${word}</strong> ${lexicon[word]}</p>`;
+                    return; // Affiche un seul résultat
+                }
+            }
+
+            resultsDiv.innerHTML = "<p>Aucun résultat trouvé.</p>";
+        }
     </script>
 </body>
 </html>
