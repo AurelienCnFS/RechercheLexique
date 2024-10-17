@@ -10,26 +10,31 @@
         #search {
             width: 300px; /* Largeur de la barre de recherche */
             padding: 10px; /* Ajout d'un peu d'espace à l'intérieur */
-            font-size: 12px; /* Augmentation de la taille de la police */
+            font-size: 16px; /* Augmentation de la taille de la police */
             margin-right: 10px; /* Espacement à droite */
         }
 
         /* Styles pour le bouton de recherche */
         #searchBtn {
             padding: 10px 20px; /* Espacement intérieur */
-            font-size: 12px; /* Augmentation de la taille de la police */
+            font-size: 16px; /* Augmentation de la taille de la police */
             cursor: pointer; /* Change le curseur lorsque l'on passe la souris */
         }
 
         /* Styles pour les résultats */
         #results {
-            margin-top: 60px; /* Espace au-dessus des résultats */
-            font-size: 20px; /* Augmentation de la taille de la police des résultats */
+            margin-top: 20px; /* Espacement au-dessus des résultats */
+            font-size: 18px; /* Taille de la police pour les résultats */
+        }
+
+        .unknown-message {
+            color: red; /* Couleur du message d'inconnu */
+            font-weight: bold; /* Mettre le message en gras */
         }
     </style>
 </head>
 <body>
-    <h1>Recherche dans le Lexique</h1>
+    <h1>Recherche Lexique</h1>
     <input type="text" id="search" placeholder="Cherchez un mot...">
     <button id="searchBtn">Rechercher</button>
     <div id="results"></div>
@@ -57,8 +62,12 @@
                     });
                 });
 
-                // Afficher les résultats
-                $('#results').html(results.join('<br>'));
+                // Afficher les résultats ou un message d'inconnu
+                if (results.length > 0) {
+                    $('#results').html(results.join('<br>'));
+                } else {
+                    $('#results').html('<span class="unknown-message">Mot inconnu mais vous pouvez l\'ajouter vous-même.</span>');
+                }
             });
         }
 
