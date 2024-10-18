@@ -1,177 +1,111 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lexique numérique</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      font-size: 18px;
-      text-align: left;
-    }
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-    #alpha-bar {
-      margin: 20px 0;
-    }
-    #alpha-bar button {
-      margin: 5px;
-      padding: 10px;
-      cursor: pointer;
-    }
-    #alpha-bar button.active {
-      background-color: #4CAF50;
-      color: white;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intégration Google Sheet avec Barre de Recherche</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        .alphabet-bar {
+            margin: 20px 0;
+        }
+        .alphabet-bar button {
+            margin: 2px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Lexique numérique</h1>
+<h2>Données de la Google Sheet</h2>
 
-  <div id="alpha-bar">
-    <!-- Boutons pour chaque lettre de l'alphabet -->
-    <button onclick="filterByLetter('A')">A</button>
-    <button onclick="filterByLetter('B')">B</button>
-    <button onclick="filterByLetter('C')">C</button>
-    <button onclick="filterByLetter('D')">D</button>
-    <button onclick="filterByLetter('E')">E</button>
-    <button onclick="filterByLetter('F')">F</button>
-    <button onclick="filterByLetter('G')">G</button>
-    <button onclick="filterByLetter('H')">H</button>
-    <button onclick="filterByLetter('I')">I</button>
-    <button onclick="filterByLetter('J')">J</button>
-    <button onclick="filterByLetter('K')">K</button>
-    <button onclick="filterByLetter('L')">L</button>
-    <button onclick="filterByLetter('M')">M</button>
-    <button onclick="filterByLetter('N')">N</button>
-    <button onclick="filterByLetter('O')">O</button>
-    <button onclick="filterByLetter('P')">P</button>
-    <button onclick="filterByLetter('Q')">Q</button>
-    <button onclick="filterByLetter('R')">R</button>
-    <button onclick="filterByLetter('S')">S</button>
-    <button onclick="filterByLetter('T')">T</button>
-    <button onclick="filterByLetter('U')">U</button>
-    <button onclick="filterByLetter('V')">V</button>
-    <button onclick="filterByLetter('W')">W</button>
-    <button onclick="filterByLetter('X')">X</button>
-    <button onclick="filterByLetter('Y')">Y</button>
-    <button onclick="filterByLetter('Z')">Z</button>
-    <button onclick="showAll()">Tout</button>
-  </div>
+<div class="alphabet-bar">
+    <button class="search-btn" data-column="A">A</button>
+    <button class="search-btn" data-column="C">B</button>
+    <button class="search-btn" data-column="C">C</button>
+    <button class="search-btn" data-column="D">D</button>
+    <button class="search-btn" data-column="E">E</button>
+    <button class="search-btn" data-column="F">F</button>
+    <button class="search-btn" data-column="G">G</button>
+    <button class="search-btn" data-column="H">H</button>
+    <button class="search-btn" data-column="I">I</button>
+    <button class="search-btn" data-column="J">J</button>
+    <button class="search-btn" data-column="K">K</button>
+    <button class="search-btn" data-column="L">L</button>
+    <button class="search-btn" data-column="M">M</button>
+    <button class="search-btn" data-column="N">N</button>
+    <button class="search-btn" data-column="O">O</button>
+    <button class="search-btn" data-column="P">P</button>
+    <button class="search-btn" data-column="Q">Q</button>
+    <button class="search-btn" data-column="R">R</button>
+    <button class="search-btn" data-column="S">S</button>
+    <button class="search-btn" data-column="T">T</button>
+    <button class="search-btn" data-column="U">U</button>
+    <button class="search-btn" data-column="V">V</button>
+    <button class="search-btn" data-column="W">W</button>
+    <button class="search-btn" data-column="X">X</button>
+    <button class="search-btn" data-column="Y">Y</button>
+    <button class="search-btn" data-column="Z">Z</button>
+    <button class="search-btn" data-column="all">Tout</button>
+</div>
 
-  <table id="lexique-table">
+<table id="data-table">
     <thead>
-      <tr>
-        <th>Mot</th>
-        <th>Définition</th>
-      </tr>
+        <tr>
+            <th>Données</th>
+        </tr>
     </thead>
     <tbody>
-      <!-- Les données de Google Sheets seront insérées ici -->
+        <!-- Les données de la feuille s'afficheront ici -->
     </tbody>
-  </table>
+</table>
 
-  <script>
-    const apiKey = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE';  // Votre clé API Google
-    const spreadsheetId = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw'; // Votre ID de feuille Google Sheets
-    const range = 'Lexique!A2:C'; // Plage de données que vous voulez récupérer (ici de A2 à C)
+<script>
+    const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw';
+    const API_KEY = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE';
+    const RANGE = 'Lexique!A1:Z100'; // Ajustez la plage selon vos besoins
 
-    // Fonction pour récupérer les données de Google Sheets via l'API
-    async function fetchSheetData() {
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des données');
+    $(document).ready(function() {
+        // Fonction pour récupérer les données de la Google Sheet
+        function fetchData() {
+            return $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`);
         }
-        const data = await response.json();
-        if (data.values) {
-          populateTable(data.values);
-        } else {
-          console.error('Aucune donnée trouvée dans la feuille.');
-        }
-      } catch (error) {
-        console.error('Erreur:', error);
-      }
-    }
 
-    // Fonction pour remplir le tableau HTML avec les données de la feuille
-    let allData = []; // Pour stocker toutes les données pour un filtrage facile
+        // Événement pour la barre de recherche
+        $('.search-btn').on('click', function() {
+            const column = $(this).data('column');
+            fetchData().then(data => {
+                const rows = data.values;
+                $('#data-table tbody').empty(); // Effacer le tableau précédent
 
-    function populateTable(data) {
-      const tableBody = document.querySelector('#lexique-table tbody');
-      tableBody.innerHTML = ''; // Effacer les anciennes données
-      allData = data; // Stocker toutes les données
-
-      data.forEach(row => {
-        const word = row[1];
-        const definition = row[2];
-
-        const tr = document.createElement('tr');
-
-        const tdWord = document.createElement('td');
-        tdWord.textContent = word;
-        tr.appendChild(tdWord);
-
-        const tdDefinition = document.createElement('td');
-        tdDefinition.textContent = definition;
-        tr.appendChild(tdDefinition);
-
-        tableBody.appendChild(tr);
-      });
-    }
-
-    // Fonction pour filtrer les mots par colonne
-    function filterByLetter(letter) {
-      const letterIndex = letter.charCodeAt(0) - 65; // Convertir 'A' à 'Z' en index 0 à 25
-      const filteredData = allData.filter(row => {
-        const word = row[1]; // Récupérer le mot
-        return word.charAt(0).toUpperCase() === letter; // Vérifier la première lettre
-      });
-
-      const tableBody = document.querySelector('#lexique-table tbody');
-      tableBody.innerHTML = ''; // Effacer le tableau avant d'afficher les résultats
-
-      filteredData.forEach(row => {
-        const tr = document.createElement('tr');
-        const tdWord = document.createElement('td');
-        tdWord.textContent = row[1]; // Mot
-        tr.appendChild(tdWord);
-        const tdDefinition = document.createElement('td');
-        tdDefinition.textContent = row[2]; // Définition
-        tr.appendChild(tdDefinition);
-        tableBody.appendChild(tr); // Ajouter la ligne au tableau
-      });
-
-      // Mettre à jour les boutons alphabétiques
-      const buttons = document.querySelectorAll('#alpha-bar button');
-      buttons.forEach(button => button.classList.remove('active'));
-      buttons.find(button => button.textContent === letter).classList.add('active'); // Marquer le bouton actif
-    }
-
-    // Fonction pour afficher toutes les lignes
-    function showAll() {
-      populateTable(allData); // Réinitialiser le tableau
-      // Réinitialiser les boutons alphabétiques
-      const buttons = document.querySelectorAll('#alpha-bar button');
-      buttons.forEach(button => button.classList.remove('active'));
-    }
-
-    // Appeler la fonction pour récupérer les données lors du chargement de la page
-    document.addEventListener('DOMContentLoaded', fetchSheetData);
-  </script>
+                if (rows && rows.length > 0) {
+                    rows.forEach(row => {
+                        const colIndex = column === 'all' ? 0 : column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
+                        const value = column === 'all' ? row.join(', ') : (row[colIndex] !== undefined ? row[colIndex] : ''); 
+                        if (value) {
+                            $('#data-table tbody').append(`<tr><td>${value}</td></tr>`);
+                        }
+                    });
+                } else {
+                    $('#data-table tbody').append('<tr><td>Aucune donnée trouvée.</td></tr>');
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
