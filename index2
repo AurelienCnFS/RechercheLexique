@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lexique numérique</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 18px;
+      text-align: left;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    #alpha-bar button {
+      margin: 5px;
+      padding: 10px;
+      cursor: pointer;
+    }
+    #alpha-bar button.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lexique numérique</h1>
+
+  <div id="alpha-bar">
+    <!-- Alphabet buttons -->
+    <button onclick="filterByLetter('A')">A</button>
+    <button onclick="filterByLetter('B')">B</button>
+    <button onclick="filterByLetter('C')">C</button>
+    <!-- Ajoutez des boutons pour chaque lettre de l'alphabet -->
+    <button onclick="filterByLetter('D')">D</button>
+    <button onclick="filterByLetter('E')">E</button>
+    <button onclick="filterByLetter('F')">F</button>
+    <!-- ... Continuez jusqu'à Z -->
+    <button onclick="filterByLetter('Z')">Z</button>
+  </div>
+
+  <table id="lexique-table">
+    <thead>
+      <tr>
+        <th>Mot</th>
+        <th>Définition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Les données de Google Sheets seront insérées ici -->
+    </tbody>
+  </table>
+
+  <script>
+    const apiKey = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE';  // Votre clé API Google
+    const spreadsheetId = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw'; // Votre ID de feuille Google Sheets
+    const range = 'Lexique!A2:B'; // Plage de données que vous voulez récupérer (ici de A2 à B)
+
+    // Fonction pour récupérer les données de Google Sheets via l'API
+    async function fetchSheetData() {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      populateTable(data.values);
+    }
+
+    // Fonction pour remplir le tableau HTML avec les données de la feuille
+    function populateTable(data) {
+      const tableBody = document.querySelector('#lexique-table tbody');
+      tableBody.innerHTML = ''; // Effacer les anciennes données
+      
+      data.forEach(row => {
+        const word = row[0];
+        const definition = row[1];
+        const firstLetter = word.charAt(0).toUpperCase();
+
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-letter', firstLetter); // Ajouter l'attribut data-letter pour le filtre
+
+        const tdWord = document.createElement('td');
+        tdWord.textContent = word;
+        tr.appendChild(tdWord);
+
+        const tdDefinition = document.createElement('td');
+        tdDefinition.textContent = definition;
+        tr.appendChild(tdDefinition);
+
+        tableBody.appendChild(tr);
+      });
+    }
+
+    // Fonction pour filtrer les mots par lettre
+    function filterByLetter(letter) {
+      const rows = document.querySelectorAll('#lexique-table tbody tr');
+      
+      rows.forEach(row => {
+        if (row.getAttribute('data-letter') === letter) {
+          row.style.display = ''; // Montrer la ligne si elle correspond à la lettre
+        } else {
+          row.style.display = 'none'; // Cacher la ligne sinon
+        }
+      });
+
+      // Mettre à jour les boutons alphabétiques
+      const buttons = document.querySelectorAll('#alpha-bar button');
+      buttons.forEach(button => button.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    // Appeler la fonction pour récupérer les données lors du chargement de la page
+    document.addEventListener('DOMContentLoaded', fetchSheetData);
+  </script>
+
+</body>
+</html>
