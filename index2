@@ -34,7 +34,7 @@
 
 <div class="alphabet-bar">
     <button class="search-btn" data-column="A">A</button>
-    <button class="search-btn" data-column="C">B</button>
+    <button class="search-btn" data-column="B">B</button>
     <button class="search-btn" data-column="C">C</button>
     <button class="search-btn" data-column="D">D</button>
     <button class="search-btn" data-column="E">E</button>
@@ -92,15 +92,29 @@
                 $('#data-table tbody').empty(); // Effacer le tableau précédent
 
                 if (rows && rows.length > 0) {
-                    rows.forEach(row => {
-                        const colIndex = column === 'all' ? 0 : column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
-                        const value = column === 'all' ? row.join(', ') : (row[colIndex] !== undefined ? row[colIndex] : ''); 
-                        if (value) {
-                            // Mettre en gras les mots précédés de ":"
-                            const formattedValue = value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value;
-                            $('#data-table tbody').append(`<tr><td>${formattedValue}</td></tr>`);
+                    if (column === 'all') {
+                        // Affiche tous les mots en colonnes
+                        for (let col = 0; col < rows[0].length; col++) {
+                            for (let row of rows) {
+                                const value = row[col];
+                                if (value) {
+                                    // Mettre en gras les mots précédés de ":"
+                                    const formattedValue = value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value;
+                                    $('#data-table tbody').append(`<tr><td>${formattedValue}</td></tr>`);
+                                }
+                            }
                         }
-                    });
+                    } else {
+                        const colIndex = column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
+                        rows.forEach(row => {
+                            const value = (row[colIndex] !== undefined ? row[colIndex] : ''); 
+                            if (value) {
+                                // Mettre en gras les mots précédés de ":"
+                                const formattedValue = value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value;
+                                $('#data-table tbody').append(`<tr><td>${formattedValue}</td></tr>`);
+                            }
+                        });
+                    }
                 } else {
                     $('#data-table tbody').append('<tr><td>Aucune donnée trouvée.</td></tr>');
                 }
