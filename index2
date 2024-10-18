@@ -108,7 +108,8 @@
                         }
                         // Affiche les mots en colonne
                         allWords.forEach(word => {
-                            $('#data-table tbody').append(`<tr><td>${word}</td></tr>`);
+                            const singleLetterClass = (word.length === 1) ? 'single-letter' : ''; // Vérifie si le mot est une seule lettre
+                            $('#data-table tbody').append(`<tr><td class="${singleLetterClass}">${word}</td></tr>`);
                         });
                     } else {
                         const colIndex = column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
