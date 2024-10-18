@@ -109,8 +109,8 @@
                         }
                         // Affiche les mots en colonne avec couleur verte pour les lettres uniques
                         allWords.forEach(word => {
-                            const isSingleLetter = word.length === 1;
-                            const classAttribute = isSingleLetter ? 'single-letter' : '';
+                            const isSingleLetter = word.length === 1; // Vérifie si c'est une seule lettre
+                            const classAttribute = isSingleLetter ? 'single-letter' : ''; // Applique la classe si c'est une seule lettre
                             $('#data-table tbody').append(`<tr><td class="${classAttribute}">${word}</td></tr>`);
                         });
                     } else {
