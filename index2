@@ -23,9 +23,9 @@
         }
         .alphabet-bar button {
             margin: 2px;
-            padding: 9px; /* Réduit le padding de 10% (de 10px à 9px) */
+            padding: 7px; /* Réduit le padding à 7px */
             cursor: pointer;
-            font-size: 90%; /* Réduit la taille de la police de 10% */
+            font-size: 90%; /* Garde la taille de la police réduite */
         }
         .single-letter {
             background-color: #90EE90; /* Couleur verte clair */
