@@ -101,21 +101,21 @@
                     const seen = new Set(); // Pour stocker les valeurs déjà affichées
 
                     if (column === 'all') {
-                        // Ne conserve que la colonne A pour l'affichage
-                        const colIndex = 0; // Colonne A
-
-                        rows.forEach((row, rowIndex) => {
-                            const colValue = row[colIndex]; // Prendre uniquement la colonne A
-
-                            // Vérifie si la valeur a déjà été affichée
-                            if (colValue && !seen.has(colValue)) {
-                                const wordHTML = colValue.includes(':') ? colValue.replace(/(.*?:)/, '<strong>$1</strong>') : colValue;
-                                const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
-                                const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
-                                $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
-                                seen.add(colValue); // Ajoute la valeur à l'ensemble
+                        // Affiche toutes les valeurs de chaque colonne dans l'ordre
+                        for (let colIndex = 0; colIndex < rows[0].length; colIndex++) {
+                            for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                                const value = rows[rowIndex][colIndex]; // Récupère la valeur de la cellule (ex: A1, B1, etc.)
+                                
+                                // Vérifie si la valeur a déjà été affichée
+                                if (value && !seen.has(value)) {
+                                    const wordHTML = value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value;
+                                    const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
+                                    const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
+                                    $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
+                                    seen.add(value); // Ajoute la valeur à l'ensemble
+                                }
                             }
-                        });
+                        }
                     } else {
                         const colIndex = column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
 
