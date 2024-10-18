@@ -42,39 +42,38 @@
 
   <div id="alpha-bar">
     <!-- Boutons pour chaque lettre de l'alphabet -->
-    <button onclick="filterByLetter(0)">A</button>
-    <button onclick="filterByLetter(1)">B</button>
-    <button onclick="filterByLetter(2)">C</button>
-    <button onclick="filterByLetter(3)">D</button>
-    <button onclick="filterByLetter(4)">E</button>
-    <button onclick="filterByLetter(5)">F</button>
-    <button onclick="filterByLetter(6)">G</button>
-    <button onclick="filterByLetter(7)">H</button>
-    <button onclick="filterByLetter(8)">I</button>
-    <button onclick="filterByLetter(9)">J</button>
-    <button onclick="filterByLetter(10)">K</button>
-    <button onclick="filterByLetter(11)">L</button>
-    <button onclick="filterByLetter(12)">M</button>
-    <button onclick="filterByLetter(13)">N</button>
-    <button onclick="filterByLetter(14)">O</button>
-    <button onclick="filterByLetter(15)">P</button>
-    <button onclick="filterByLetter(16)">Q</button>
-    <button onclick="filterByLetter(17)">R</button>
-    <button onclick="filterByLetter(18)">S</button>
-    <button onclick="filterByLetter(19)">T</button>
-    <button onclick="filterByLetter(20)">U</button>
-    <button onclick="filterByLetter(21)">V</button>
-    <button onclick="filterByLetter(22)">W</button>
-    <button onclick="filterByLetter(23)">X</button>
-    <button onclick="filterByLetter(24)">Y</button>
-    <button onclick="filterByLetter(25)">Z</button>
+    <button onclick="filterByLetter('A')">A</button>
+    <button onclick="filterByLetter('B')">B</button>
+    <button onclick="filterByLetter('C')">C</button>
+    <button onclick="filterByLetter('D')">D</button>
+    <button onclick="filterByLetter('E')">E</button>
+    <button onclick="filterByLetter('F')">F</button>
+    <button onclick="filterByLetter('G')">G</button>
+    <button onclick="filterByLetter('H')">H</button>
+    <button onclick="filterByLetter('I')">I</button>
+    <button onclick="filterByLetter('J')">J</button>
+    <button onclick="filterByLetter('K')">K</button>
+    <button onclick="filterByLetter('L')">L</button>
+    <button onclick="filterByLetter('M')">M</button>
+    <button onclick="filterByLetter('N')">N</button>
+    <button onclick="filterByLetter('O')">O</button>
+    <button onclick="filterByLetter('P')">P</button>
+    <button onclick="filterByLetter('Q')">Q</button>
+    <button onclick="filterByLetter('R')">R</button>
+    <button onclick="filterByLetter('S')">S</button>
+    <button onclick="filterByLetter('T')">T</button>
+    <button onclick="filterByLetter('U')">U</button>
+    <button onclick="filterByLetter('V')">V</button>
+    <button onclick="filterByLetter('W')">W</button>
+    <button onclick="filterByLetter('X')">X</button>
+    <button onclick="filterByLetter('Y')">Y</button>
+    <button onclick="filterByLetter('Z')">Z</button>
     <button onclick="showAll()">Tout</button>
   </div>
 
   <table id="lexique-table">
     <thead>
       <tr>
-        <th>Lettre</th>
         <th>Mot</th>
         <th>Définition</th>
       </tr>
@@ -117,16 +116,10 @@
       allData = data; // Stocker toutes les données
 
       data.forEach(row => {
-        const letter = row[0].charAt(0).toUpperCase(); // Récupérer la première lettre du mot
         const word = row[1];
         const definition = row[2];
 
         const tr = document.createElement('tr');
-        tr.setAttribute('data-letter', letter); // Ajouter l'attribut data-letter pour le filtre
-
-        const tdLetter = document.createElement('td');
-        tdLetter.textContent = letter;
-        tr.appendChild(tdLetter);
 
         const tdWord = document.createElement('td');
         tdWord.textContent = word;
@@ -141,16 +134,15 @@
     }
 
     // Fonction pour filtrer les mots par colonne
-    function filterByLetter(index) {
+    function filterByLetter(letter) {
       const rows = document.querySelectorAll('#lexique-table tbody tr');
       
       rows.forEach(row => {
-        const word = allData[rows.length - 1 - index][index + 1]; // Utiliser l'index pour obtenir le mot de la bonne colonne
-        if (word) {
+        const word = row.cells[0].textContent;
+        const firstLetter = word.charAt(0).toUpperCase(); // Récupérer la première lettre du mot
+
+        if (firstLetter === letter) {
           row.style.display = ''; // Montrer la ligne si elle correspond à la lettre
-          row.cells[0].textContent = String.fromCharCode(65 + index); // Afficher la lettre correspondante
-          row.cells[1].textContent = word; // Afficher le mot
-          row.cells[2].textContent = allData[rows.length - 1 - index][2]; // Afficher la définition
         } else {
           row.style.display = 'none'; // Cacher la ligne sinon
         }
@@ -159,7 +151,7 @@
       // Mettre à jour les boutons alphabétiques
       const buttons = document.querySelectorAll('#alpha-bar button');
       buttons.forEach(button => button.classList.remove('active'));
-      buttons[index].classList.add('active'); // Marquer le bouton actif
+      buttons.find(button => button.textContent === letter).classList.add('active'); // Marquer le bouton actif
     }
 
     // Fonction pour afficher toutes les lignes
