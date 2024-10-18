@@ -96,7 +96,9 @@
                         const colIndex = column === 'all' ? 0 : column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
                         const value = column === 'all' ? row.join(', ') : (row[colIndex] !== undefined ? row[colIndex] : ''); 
                         if (value) {
-                            $('#data-table tbody').append(`<tr><td>${value}</td></tr>`);
+                            // Mettre en gras les mots précédés de ":"
+                            const formattedValue = value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value;
+                            $('#data-table tbody').append(`<tr><td>${formattedValue}</td></tr>`);
                         }
                     });
                 } else {
