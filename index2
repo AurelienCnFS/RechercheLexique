@@ -135,17 +135,24 @@
 
     // Fonction pour filtrer les mots par colonne
     function filterByLetter(letter) {
-      const rows = document.querySelectorAll('#lexique-table tbody tr');
-      
-      rows.forEach(row => {
-        const word = row.cells[0].textContent;
-        const firstLetter = word.charAt(0).toUpperCase(); // Récupérer la première lettre du mot
+      const letterIndex = letter.charCodeAt(0) - 65; // Convertir 'A' à 'Z' en index 0 à 25
+      const filteredData = allData.filter(row => {
+        const word = row[1]; // Récupérer le mot
+        return word.charAt(0).toUpperCase() === letter; // Vérifier la première lettre
+      });
 
-        if (firstLetter === letter) {
-          row.style.display = ''; // Montrer la ligne si elle correspond à la lettre
-        } else {
-          row.style.display = 'none'; // Cacher la ligne sinon
-        }
+      const tableBody = document.querySelector('#lexique-table tbody');
+      tableBody.innerHTML = ''; // Effacer le tableau avant d'afficher les résultats
+
+      filteredData.forEach(row => {
+        const tr = document.createElement('tr');
+        const tdWord = document.createElement('td');
+        tdWord.textContent = row[1]; // Mot
+        tr.appendChild(tdWord);
+        const tdDefinition = document.createElement('td');
+        tdDefinition.textContent = row[2]; // Définition
+        tr.appendChild(tdDefinition);
+        tableBody.appendChild(tr); // Ajouter la ligne au tableau
       });
 
       // Mettre à jour les boutons alphabétiques
@@ -156,11 +163,7 @@
 
     // Fonction pour afficher toutes les lignes
     function showAll() {
-      const rows = document.querySelectorAll('#lexique-table tbody tr');
-      rows.forEach(row => {
-        row.style.display = ''; // Montrer toutes les lignes
-      });
-
+      populateTable(allData); // Réinitialiser le tableau
       // Réinitialiser les boutons alphabétiques
       const buttons = document.querySelectorAll('#alpha-bar button');
       buttons.forEach(button => button.classList.remove('active'));
