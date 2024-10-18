@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lexique numérique</title>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -18,6 +21,9 @@
     }
     th {
       background-color: #f2f2f2;
+    }
+    #alpha-bar {
+      margin: 20px 0;
     }
     #alpha-bar button {
       margin: 5px;
@@ -35,21 +41,39 @@
   <h1>Lexique numérique</h1>
 
   <div id="alpha-bar">
-    <!-- Alphabet buttons -->
+    <!-- Boutons pour chaque lettre de l'alphabet -->
     <button onclick="filterByLetter('A')">A</button>
     <button onclick="filterByLetter('B')">B</button>
     <button onclick="filterByLetter('C')">C</button>
-    <!-- Ajoutez des boutons pour chaque lettre de l'alphabet -->
     <button onclick="filterByLetter('D')">D</button>
     <button onclick="filterByLetter('E')">E</button>
     <button onclick="filterByLetter('F')">F</button>
-    <!-- ... Continuez jusqu'à Z -->
+    <button onclick="filterByLetter('G')">G</button>
+    <button onclick="filterByLetter('H')">H</button>
+    <button onclick="filterByLetter('I')">I</button>
+    <button onclick="filterByLetter('J')">J</button>
+    <button onclick="filterByLetter('K')">K</button>
+    <button onclick="filterByLetter('L')">L</button>
+    <button onclick="filterByLetter('M')">M</button>
+    <button onclick="filterByLetter('N')">N</button>
+    <button onclick="filterByLetter('O')">O</button>
+    <button onclick="filterByLetter('P')">P</button>
+    <button onclick="filterByLetter('Q')">Q</button>
+    <button onclick="filterByLetter('R')">R</button>
+    <button onclick="filterByLetter('S')">S</button>
+    <button onclick="filterByLetter('T')">T</button>
+    <button onclick="filterByLetter('U')">U</button>
+    <button onclick="filterByLetter('V')">V</button>
+    <button onclick="filterByLetter('W')">W</button>
+    <button onclick="filterByLetter('X')">X</button>
+    <button onclick="filterByLetter('Y')">Y</button>
     <button onclick="filterByLetter('Z')">Z</button>
   </div>
 
   <table id="lexique-table">
     <thead>
       <tr>
+        <th>Lettre</th>
         <th>Mot</th>
         <th>Définition</th>
       </tr>
@@ -62,7 +86,7 @@
   <script>
     const apiKey = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE';  // Votre clé API Google
     const spreadsheetId = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw'; // Votre ID de feuille Google Sheets
-    const range = 'Lexique!A2:B'; // Plage de données que vous voulez récupérer (ici de A2 à B)
+    const range = 'Lexique!A2:C'; // Plage de données que vous voulez récupérer (ici de A2 à C)
 
     // Fonction pour récupérer les données de Google Sheets via l'API
     async function fetchSheetData() {
@@ -78,12 +102,16 @@
       tableBody.innerHTML = ''; // Effacer les anciennes données
       
       data.forEach(row => {
-        const word = row[0];
-        const definition = row[1];
-        const firstLetter = word.charAt(0).toUpperCase();
+        const letter = row[0].charAt(0).toUpperCase(); // Récupérer la première lettre du mot
+        const word = row[1];
+        const definition = row[2];
 
         const tr = document.createElement('tr');
-        tr.setAttribute('data-letter', firstLetter); // Ajouter l'attribut data-letter pour le filtre
+        tr.setAttribute('data-letter', letter); // Ajouter l'attribut data-letter pour le filtre
+
+        const tdLetter = document.createElement('td');
+        tdLetter.textContent = letter;
+        tr.appendChild(tdLetter);
 
         const tdWord = document.createElement('td');
         tdWord.textContent = word;
