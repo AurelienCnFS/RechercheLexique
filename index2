@@ -25,8 +25,7 @@
             margin: 2px;
             padding: 7px; /* Réduit le padding de 10% (de 10px à 7px) */
             cursor: pointer;
-            font-size: 80%; /* Réduit la taille de la police de 20% */
-
+            font-size: 90%; /* Réduit la taille de la police de 20% */
         }
         .single-letter {
             background-color: #90EE90; /* Couleur verte clair */
