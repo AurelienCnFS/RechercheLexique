@@ -68,6 +68,7 @@
     <button onclick="filterByLetter('X')">X</button>
     <button onclick="filterByLetter('Y')">Y</button>
     <button onclick="filterByLetter('Z')">Z</button>
+    <button onclick="showAll()">Tout</button>
   </div>
 
   <table id="lexique-table">
@@ -91,9 +92,20 @@
     // Fonction pour récupérer les données de Google Sheets via l'API
     async function fetchSheetData() {
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      populateTable(data.values);
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des données');
+        }
+        const data = await response.json();
+        if (data.values) {
+          populateTable(data.values);
+        } else {
+          console.error('Aucune donnée trouvée dans la feuille.');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+      }
     }
 
     // Fonction pour remplir le tableau HTML avec les données de la feuille
@@ -141,6 +153,18 @@
       const buttons = document.querySelectorAll('#alpha-bar button');
       buttons.forEach(button => button.classList.remove('active'));
       event.target.classList.add('active');
+    }
+
+    // Fonction pour afficher toutes les lignes
+    function showAll() {
+      const rows = document.querySelectorAll('#lexique-table tbody tr');
+      rows.forEach(row => {
+        row.style.display = ''; // Montrer toutes les lignes
+      });
+
+      // Réinitialiser les boutons alphabétiques
+      const buttons = document.querySelectorAll('#alpha-bar button');
+      buttons.forEach(button => button.classList.remove('active'));
     }
 
     // Appeler la fonction pour récupérer les données lors du chargement de la page
