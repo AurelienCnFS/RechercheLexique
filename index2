@@ -15,11 +15,8 @@
             padding: 8px;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #f2f2f2; /* Couleur d'arrière-plan pour les en-têtes de colonne */
             text-align: left;
-        }
-        .highlight {
-            background-color: lightgreen; /* Couleur de fond verte claire pour la ligne d'en-tête */
         }
         .alphabet-bar {
             margin: 20px 0;
@@ -28,6 +25,9 @@
             margin: 2px;
             padding: 10px;
             cursor: pointer;
+        }
+        .single-letter {
+            background-color: #90EE90; /* Couleur verte clair */
         }
     </style>
 </head>
@@ -67,7 +67,7 @@
 
 <table id="data-table">
     <thead>
-        <tr class="highlight"> <!-- Ligne d'en-tête colorée en vert clair -->
+        <tr>
             <th>Définitions</th>
         </tr>
     </thead>
@@ -117,13 +117,16 @@
                         rows.forEach(row => {
                             const value = (row[colIndex] !== undefined ? row[colIndex] : ''); 
                             if (value) {
-                                columnWords.push(value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value);
+                                const wordHTML = value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value;
+                                columnWords.push(wordHTML);
                             }
                         });
 
                         // Affiche les mots de la colonne sélectionnée
                         columnWords.forEach(word => {
-                            $('#data-table tbody').append(`<tr><td>${word}</td></tr>`);
+                            // Vérifie si le mot est une seule lettre
+                            const singleLetterClass = (word.length === 1) ? 'single-letter' : '';
+                            $('#data-table tbody').append(`<tr><td class="${singleLetterClass}">${word}</td></tr>`);
                         });
                     }
                 } else {
