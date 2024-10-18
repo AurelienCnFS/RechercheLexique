@@ -26,11 +26,14 @@
             padding: 10px;
             cursor: pointer;
         }
+        .highlight {
+            background-color: lightgreen; /* Couleur de fond verte claire pour la colonne A */
+        }
     </style>
 </head>
 <body>
 
-<h2>Données de la Google Sheet</h2>
+<h2>Lexique numérique participatif</h2>
 
 <div class="alphabet-bar">
     <button class="search-btn" data-column="A">A</button>
@@ -65,7 +68,7 @@
 <table id="data-table">
     <thead>
         <tr>
-            <th>Données</th>
+            <th>Définitions</th>
         </tr>
     </thead>
     <tbody>
@@ -119,8 +122,10 @@
                         });
 
                         // Affiche les mots de la colonne sélectionnée
-                        columnWords.forEach(word => {
-                            $('#data-table tbody').append(`<tr><td>${word}</td></tr>`);
+                        columnWords.forEach((word, index) => {
+                            // Appliquer une classe pour la couleur de fond si c'est la colonne A
+                            const className = column === 'A' ? 'highlight' : '';
+                            $('#data-table tbody').append(`<tr class="${className}"><td>${word}</td></tr>`);
                         });
                     }
                 } else {
