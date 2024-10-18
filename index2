@@ -111,6 +111,14 @@
                             const singleLetterClass = (word.length === 1) ? 'single-letter' : ''; // Vérifie si le mot est une seule lettre
                             $('#data-table tbody').append(`<tr><td class="${singleLetterClass}">${word}</td></tr>`);
                         });
+
+                        // Ajout de la coloration verte pour les cellules A1, B1, C1, etc.
+                        const headerCells = [];
+                        for (let i = 0; i < 26; i++) {
+                            const columnLetter = String.fromCharCode(65 + i); // A=65, B=66, etc.
+                            headerCells.push(`<td class="single-letter">${columnLetter}</td>`);
+                        }
+                        $('#data-table thead tr').empty().append(headerCells.join(''));
                     } else {
                         const colIndex = column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
                         const columnWords = [];
@@ -128,6 +136,9 @@
                             const singleLetterClass = (item.word.length === 1) ? 'single-letter' : ''; // Vérifie si le mot est une seule lettre
                             $('#data-table tbody').append(`<tr><td class="${singleLetterClass}">${item.word}</td></tr>`);
                         });
+
+                        // Ajout de la coloration verte pour la cellule d'en-tête correspondante
+                        $('#data-table thead tr').empty().append(`<td class="single-letter">${column}</td>`);
                     }
                 } else {
                     $('#data-table tbody').append('<tr><td>Aucune donnée trouvée.</td></tr>');
