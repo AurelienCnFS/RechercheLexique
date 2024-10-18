@@ -19,7 +19,7 @@
             text-align: left;
         }
         .highlight {
-            background-color: lightgreen; /* Couleur de fond verte claire pour la ligne */
+            background-color: lightgreen; /* Couleur de fond verte claire pour la ligne d'en-tête */
         }
         .alphabet-bar {
             margin: 20px 0;
@@ -67,7 +67,7 @@
 
 <table id="data-table">
     <thead>
-        <tr>
+        <tr class="highlight"> <!-- Ligne d'en-tête colorée en vert clair -->
             <th>Définitions</th>
         </tr>
     </thead>
@@ -122,14 +122,10 @@
                         });
 
                         // Affiche les mots de la colonne sélectionnée
-                        columnWords.forEach((word, index) => {
-                            // Appliquer une classe pour la couleur de fond si c'est la colonne A
-                            const className = column === 'A' ? 'highlight' : '';
-                            $('#data-table tbody').append(`<tr class="${className}"><td>${word}</td></tr>`);
+                        columnWords.forEach(word => {
+                            $('#data-table tbody').append(`<tr><td>${word}</td></tr>`);
                         });
                     }
-                    // Colorie la ligne de tête
-                    $('#data-table thead tr').addClass('highlight');
                 } else {
                     $('#data-table tbody').append('<tr><td>Aucune donnée trouvée.</td></tr>');
                 }
