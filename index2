@@ -29,6 +29,9 @@
         .single-letter {
             background-color: #90EE90; /* Couleur verte clair */
         }
+        .header-cell {
+            background-color: #90EE90; /* Couleur verte pour la première ligne */
+        }
     </style>
 </head>
 <body>
@@ -95,40 +98,19 @@
                 $('#data-table tbody').empty(); // Effacer le tableau précédent
 
                 if (rows && rows.length > 0) {
-                    if (column === 'all') {
-                        // Affiche tous les mots en une seule colonne
-                        const allWords = [];
-                        for (let col = 0; col < rows[0].length; col++) {
-                            for (let row of rows) {
-                                const value = row[col];
-                                if (value) {
-                                    allWords.push(value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value);
-                                }
-                            }
-                        }
-                        // Affiche les mots en colonne
-                        allWords.forEach(word => {
-                            const singleLetterClass = (word.length === 1) ? 'single-letter' : ''; // Vérifie si le mot est une seule lettre
-                            $('#data-table tbody').append(`<tr><td class="${singleLetterClass}">${word}</td></tr>`);
-                        });
-                    } else {
-                        const colIndex = column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
-                        const columnWords = [];
-                        
-                        rows.forEach(row => {
-                            const value = (row[colIndex] !== undefined ? row[colIndex] : ''); 
-                            if (value) {
-                                const wordHTML = value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value;
-                                columnWords.push({word: wordHTML, isSingleLetter: value.length === 1}); // Enregistre aussi si c'est une lettre unique
-                            }
-                        });
+                    // Affiche les mots de la colonne sélectionnée
+                    const colIndex = (column === 'all') ? null : column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
+                    
+                    rows.forEach((row, rowIndex) => {
+                        const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
+                        const colValue = (colIndex !== null) ? (row[colIndex] !== undefined ? row[colIndex] : '') : row.join(', '); // Concatène toutes les colonnes si 'all'
 
-                        // Affiche les mots de la colonne sélectionnée
-                        columnWords.forEach(item => {
-                            const singleLetterClass = (item.word.length === 1) ? 'single-letter' : ''; // Vérifie si le mot est une seule lettre
-                            $('#data-table tbody').append(`<tr><td class="${singleLetterClass}">${item.word}</td></tr>`);
-                        });
-                    }
+                        if (colValue) {
+                            const wordHTML = colValue.includes(':') ? colValue.replace(/(.*?:)/, '<strong>$1</strong>') : colValue;
+                            const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
+                            $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
+                        }
+                    });
                 } else {
                     $('#data-table tbody').append('<tr><td>Aucune donnée trouvée.</td></tr>');
                 }
