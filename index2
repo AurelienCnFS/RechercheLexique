@@ -118,15 +118,14 @@
                             const value = (row[colIndex] !== undefined ? row[colIndex] : ''); 
                             if (value) {
                                 const wordHTML = value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value;
-                                columnWords.push(wordHTML);
+                                columnWords.push({word: wordHTML, isSingleLetter: value.length === 1}); // Enregistre aussi si c'est une lettre unique
                             }
                         });
 
                         // Affiche les mots de la colonne sélectionnée
-                        columnWords.forEach(word => {
-                            // Vérifie si le mot est une seule lettre
-                            const singleLetterClass = (word.length === 1) ? 'single-letter' : '';
-                            $('#data-table tbody').append(`<tr><td class="${singleLetterClass}">${word}</td></tr>`);
+                        columnWords.forEach(item => {
+                            const singleLetterClass = (item.word.length === 1) ? 'single-letter' : ''; // Vérifie si le mot est une seule lettre
+                            $('#data-table tbody').append(`<tr><td class="${singleLetterClass}">${item.word}</td></tr>`);
                         });
                     }
                 } else {
