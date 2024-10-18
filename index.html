@@ -31,10 +31,14 @@
             color: red; /* Couleur du message d'inconnu */
             font-size: 18px; /* Taille de la police pour le message introuvable */
         }
+
+        .result-bold {
+            font-weight: bold; /* Mettre en gras */
+        }
     </style>
 </head>
 <body>
-    <h1>Rechercher dans le Lexique</h1> <!-- Titre modifié ici -->
+    <h1>Rechercher dans le Lexique</h1> <!-- Titre modifié -->
     <input type="text" id="search" placeholder="Cherchez un mot...">
     <button id="searchBtn">Rechercher</button>
     <div id="results"></div>
@@ -59,7 +63,10 @@
                             // Vérifier si le terme de recherche correspond à un mot entier ou à une combinaison de mots
                             const words = wordBeforeColon.split(' '); // Séparer en mots
                             if (searchTerm.split(' ').every(term => words.includes(term))) {
-                                results.push(cell); // Ne garder que la cellule concernée
+                                // Diviser le contenu avant et après les deux-points
+                                const afterColon = cellContent.split(':')[1] || ''; // Contenu après les deux-points
+                                const formattedResult = `<span class="result-bold">${wordBeforeColon}</span> : ${afterColon.trim()}`;
+                                results.push(formattedResult); // Ajouter le résultat formaté
                             }
                         }
                     });
@@ -73,7 +80,7 @@
                 }
                 
                 // Vider la barre de recherche après l'affichage des résultats
-                $('#search').val(''); // Réinitialiser le champ de recherche ici
+                $('#search').val(''); // Réinitialiser le champ de recherche
             });
         }
 
