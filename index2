@@ -30,9 +30,6 @@
         .single-letter {
             background-color: #90EE90; /* Couleur verte clair pour les mots d'une seule lettre */
         }
-        .all-words {
-            background-color: #90EE90; /* Couleur verte clair pour toutes les définitions dans "Tout" */
-        }
     </style>
 </head>
 <body>
@@ -106,13 +103,15 @@
                             for (let row of rows) {
                                 const value = row[col];
                                 if (value) {
-                                    allWords.push(value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value);
+                                    allWords.push(value);
                                 }
                             }
                         }
-                        // Affiche les mots en colonne avec une couleur verte
+                        // Affiche les mots en colonne avec couleur verte pour les lettres uniques
                         allWords.forEach(word => {
-                            $('#data-table tbody').append(`<tr><td class="all-words">${word}</td></tr>`);
+                            const isSingleLetter = word.length === 1;
+                            const classAttribute = isSingleLetter ? 'single-letter' : '';
+                            $('#data-table tbody').append(`<tr><td class="${classAttribute}">${word}</td></tr>`);
                         });
                     } else {
                         const colIndex = column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
