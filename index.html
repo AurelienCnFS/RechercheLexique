@@ -8,32 +8,32 @@
     <style>
         /* Styles pour la barre de recherche */
         #search {
-            width: 300px; /* Largeur de la barre de recherche */
-            padding: 10px; /* Ajout d'un peu d'espace à l'intérieur */
-            font-size: 16px; /* Augmentation de la taille de la police */
-            margin-right: 10px; /* Espacement à droite */
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
         }
 
         /* Styles pour le bouton de recherche */
         #searchBtn {
-            padding: 10px 20px; /* Espacement intérieur */
-            font-size: 16px; /* Augmentation de la taille de la police */
-            cursor: pointer; /* Change le curseur lorsque l'on passe la souris */
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
         /* Styles pour les résultats */
         #results {
-            margin-top: 20px; /* Espacement au-dessus des résultats */
-            font-size: 18px; /* Taille de la police pour les résultats */
+            margin-top: 20px;
+            font-size: 18px;
         }
 
         .unknown-message {
-            color: red; /* Couleur du message d'inconnu */
-            font-size: 18px; /* Taille de la police pour le message introuvable */
+            color: red;
+            font-size: 18px;
         }
 
         .result-bold {
-            font-weight: bold; /* Mettre en gras */
+            font-weight: bold;
         }
     </style>
 </head>
@@ -46,14 +46,14 @@
         const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw'; // Remplacez par votre ID de feuille
         const API_KEY = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE'; // Remplacez par votre clé API
 
-        // Fonction pour mettre en majuscule la première lettre d'une chaîne
+        // Fonction pour mettre en majuscule la première lettre d'un mot
         function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
+            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
         }
 
         // Fonction pour exécuter la recherche
         function executeSearch() {
-            const searchTerm = $('#search').val().toLowerCase().trim(); // Récupérer et nettoyer le terme de recherche
+            const searchTerm = $('#search').val().toLowerCase().trim();
             $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Lexique?key=${API_KEY}`, function(data) {
                 const rows = data.values || [];
                 const results = [];
@@ -63,18 +63,20 @@
                     row.forEach(cell => {
                         if (cell) {
                             const cellContent = cell.toLowerCase();
-                            const wordBeforeColon = cellContent.split(':')[0].trim(); // Récupérer la partie avant le ':'
-                            
+                            const wordBeforeColon = cellContent.split(':')[0].trim();
+
                             // Vérifier si le terme de recherche correspond à un mot entier ou à une combinaison de mots
-                            const words = wordBeforeColon.split(' '); // Séparer en mots
+                            const words = wordBeforeColon.split(' ');
                             if (searchTerm.split(' ').every(term => words.includes(term))) {
-                                // Mettre la première lettre en majuscule
-                                const capitalizedWordBeforeColon = capitalizeFirstLetter(wordBeforeColon);
-                                
+                                // Mettre en majuscule la première lettre du premier mot
+                                const formattedWordBeforeColon = wordBeforeColon.split(' ').map((word, index) => {
+                                    return index === 0 ? capitalizeFirstLetter(word) : word;
+                                }).join(' ');
+
                                 // Diviser le contenu avant et après les deux-points
-                                const afterColon = cellContent.split(':')[1] || ''; // Contenu après les deux-points
-                                const formattedResult = `<span class="result-bold">${capitalizedWordBeforeColon}</span> : ${afterColon.trim()}`;
-                                results.push(formattedResult); // Ajouter le résultat formaté
+                                const afterColon = cellContent.split(':')[1] || '';
+                                const formattedResult = `<span class="result-bold">${formattedWordBeforeColon}</span> : ${afterColon.trim()}`;
+                                results.push(formattedResult);
                             }
                         }
                     });
@@ -82,13 +84,13 @@
 
                 // Afficher les résultats ou un message d'inconnu
                 if (results.length > 0) {
-                    $('#results').html(results.join('<br><br>')); // Ajoute un espace entre les résultats
+                    $('#results').html(results.join('<br><br>'));
                 } else {
                     $('#results').html('<span class="unknown-message">Mot introuvable, n\'hésitez pas à l\'ajouter.</span>');
                 }
-                
+
                 // Vider la barre de recherche après l'affichage des résultats
-                $('#search').val(''); // Réinitialiser le champ de recherche
+                $('#search').val('');
             });
         }
 
@@ -99,9 +101,9 @@
 
         // Écouteur d'événements pour la touche "Entrée" dans le champ de recherche
         $('#search').keydown(function(event) {
-            if (event.key === 'Enter') { // Vérifie si la touche est "Entrée"
+            if (event.key === 'Enter') {
                 executeSearch();
-                event.preventDefault(); // Empêche le comportement par défaut
+                event.preventDefault();
             }
         });
     </script>
