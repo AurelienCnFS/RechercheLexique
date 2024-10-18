@@ -98,19 +98,40 @@
                 $('#data-table tbody').empty(); // Effacer le tableau précédent
 
                 if (rows && rows.length > 0) {
-                    // Affiche les mots de la colonne sélectionnée
-                    const colIndex = (column === 'all') ? null : column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
-                    
-                    rows.forEach((row, rowIndex) => {
-                        const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
-                        const colValue = (colIndex !== null) ? (row[colIndex] !== undefined ? row[colIndex] : '') : row.join(', '); // Concatène toutes les colonnes si 'all'
+                    const seen = new Set(); // Pour stocker les valeurs déjà affichées
 
-                        if (colValue) {
-                            const wordHTML = colValue.includes(':') ? colValue.replace(/(.*?:)/, '<strong>$1</strong>') : colValue;
-                            const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
-                            $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
-                        }
-                    });
+                    if (column === 'all') {
+                        // Ne conserve que la colonne A pour l'affichage
+                        const colIndex = 0; // Colonne A
+
+                        rows.forEach((row, rowIndex) => {
+                            const colValue = row[colIndex]; // Prendre uniquement la colonne A
+
+                            // Vérifie si la valeur a déjà été affichée
+                            if (colValue && !seen.has(colValue)) {
+                                const wordHTML = colValue.includes(':') ? colValue.replace(/(.*?:)/, '<strong>$1</strong>') : colValue;
+                                const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
+                                const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
+                                $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
+                                seen.add(colValue); // Ajoute la valeur à l'ensemble
+                            }
+                        });
+                    } else {
+                        const colIndex = column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
+
+                        rows.forEach((row, rowIndex) => {
+                            const colValue = (row[colIndex] !== undefined ? row[colIndex] : ''); 
+
+                            // Vérifie si la valeur a déjà été affichée
+                            if (colValue && !seen.has(colValue)) {
+                                const wordHTML = colValue.includes(':') ? colValue.replace(/(.*?:)/, '<strong>$1</strong>') : colValue;
+                                const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
+                                const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
+                                $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
+                                seen.add(colValue); // Ajoute la valeur à l'ensemble
+                            }
+                        });
+                    }
                 } else {
                     $('#data-table tbody').append('<tr><td>Aucune donnée trouvée.</td></tr>');
                 }
