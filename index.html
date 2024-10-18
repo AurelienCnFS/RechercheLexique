@@ -38,13 +38,18 @@
     </style>
 </head>
 <body>
-    <h1>Rechercher dans le Lexique</h1> <!-- Titre modifié -->
+    <h1>Rechercher dans le Lexique</h1>
     <input type="text" id="search" placeholder="Cherchez un mot...">
     <button id="searchBtn">Rechercher</button>
     <div id="results"></div>
     <script>
         const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw'; // Remplacez par votre ID de feuille
         const API_KEY = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE'; // Remplacez par votre clé API
+
+        // Fonction pour mettre en majuscule la première lettre d'une chaîne
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
 
         // Fonction pour exécuter la recherche
         function executeSearch() {
@@ -63,9 +68,12 @@
                             // Vérifier si le terme de recherche correspond à un mot entier ou à une combinaison de mots
                             const words = wordBeforeColon.split(' '); // Séparer en mots
                             if (searchTerm.split(' ').every(term => words.includes(term))) {
+                                // Mettre la première lettre en majuscule
+                                const capitalizedWordBeforeColon = capitalizeFirstLetter(wordBeforeColon);
+                                
                                 // Diviser le contenu avant et après les deux-points
                                 const afterColon = cellContent.split(':')[1] || ''; // Contenu après les deux-points
-                                const formattedResult = `<span class="result-bold">${wordBeforeColon}</span> : ${afterColon.trim()}`;
+                                const formattedResult = `<span class="result-bold">${capitalizedWordBeforeColon}</span> : ${afterColon.trim()}`;
                                 results.push(formattedResult); // Ajouter le résultat formaté
                             }
                         }
