@@ -90,12 +90,7 @@
                             // Vérification stricte : chaque mot du terme de recherche doit correspondre à un mot entier
                             const allWordsMatch = searchWords.every(term => wordsBeforeColon.includes(term));
 
-                            // Vérifier que le terme recherché correspond à un mot complet (longueur)
-                            const hasExactMatch = searchWords.every(term => {
-                                return wordsBeforeColon.some(word => word === term);
-                            });
-
-                            if (allWordsMatch && hasExactMatch) {
+                            if (allWordsMatch) {
                                 // Formatage pour le résultat
                                 const formattedWordBeforeColon = beforeColon.split(' ').map((word, index) => {
                                     return index === 0 ? capitalizeFirstLetter(word) : word;
