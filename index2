@@ -38,6 +38,7 @@
 <body>
 
 <h2>Lexique numérique participatif</h2>
+<h3>Cliquez sur la lettre pour découvrir les définitions correspondantes :</h3> <!-- Sous-titre ajouté -->
 
 <div class="alphabet-bar">
     <button class="search-btn" data-column="A">A</button>
@@ -109,7 +110,7 @@
                                 
                                 // Vérifie si la valeur a déjà été affichée
                                 if (value && !seen.has(value)) {
-                                    const wordHTML = value.includes(':') ? value.replace(/(.*?:)/, '$1 ') : value; // Espace après le titre
+                                    const wordHTML = value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value;
                                     const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
                                     const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
                                     $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
@@ -125,7 +126,7 @@
 
                             // Vérifie si la valeur a déjà été affichée
                             if (colValue && !seen.has(colValue)) {
-                                const wordHTML = colValue.includes(':') ? colValue.replace(/(.*?:)/, '$1 ') : colValue; // Espace après le titre
+                                const wordHTML = colValue.includes(':') ? colValue.replace(/(.*?:)/, '<strong>$1</strong>') : colValue;
                                 const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
                                 const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
                                 $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
