@@ -38,7 +38,7 @@
 <body>
 
 <h2>Lexique numérique participatif</h2>
-<h3 style="font-weight: normal;">Cliquez sur la lettre pour découvrir les définitions correspondantes :</h3> <!-- Sous-titre ajouté -->
+<h3 style="font-weight: normal;">Cliquez sur une lettre pour découvrir les définitions correspondantes :</h3> <!-- Sous-titre ajouté -->
 
 <div class="alphabet-bar">
     <button class="search-btn" data-column="A">A</button>
