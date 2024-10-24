@@ -3,119 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rechercher dans le Lexique</title>
+    <title>Lexique numérique participatif</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* Styles pour la barre de recherche */
-        #search {
-            width: 300px;
-            padding: 10px;
-            font-size: 16px;
-            margin-right: 10px;
+        table {
+            border-collapse: collapse;
+            width: 100%;
         }
-
-        /* Styles pour le bouton de recherche */
-        #searchBtn {
-            padding: 10px 20px;
-            font-size: 16px;
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2; /* Couleur d'arrière-plan pour les en-têtes de colonne */
+            text-align: left;
+        }
+        .alphabet-bar {
+            margin: 20px 0;
+        }
+        .alphabet-bar button {
+            margin: 2px;
+            padding: 7px; /* Réduit le padding de 10% (de 10px à 7px) */
             cursor: pointer;
+            font-size: 90%; /* Réduit la taille de la police de 20% */
         }
-
-        /* Styles pour les résultats */
-        #results {
-            margin-top: 20px;
-            font-size: 18px;
+        .single-letter {
+            background-color: #90EE90; /* Couleur verte clair */
         }
-
-        .unknown-message {
-            color: red;
-            font-size: 18px;
-        }
-
-        .result-bold {
-            font-weight: bold;
-        }
-
-        /* Nouvelle taille pour le titre */
-        h1 {
-            font-size: 24px; /* Taille mise à 24 pixels */
-
-        /* Style pour le sous-titre */
-        h2 {
-            font-size: 18px; /* Taille pour le sous-titre */
-            margin-top: 5px; /* Espace au-dessus du sous-titre */
+        .header-cell {
+            background-color: #90EE90; /* Couleur verte pour la première ligne */
         }
     </style>
 </head>
 <body>
-    <h1>Rechercher dans le Lexique</h1>
-    <input type="text" id="search" placeholder="Cherchez un mot...">
-    <button id="searchBtn">Rechercher</button>
-    <div id="results"></div>
-    <script>
-        const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw'; // Remplacez par votre ID de feuille
-        const API_KEY = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE'; // Remplacez par votre clé API
 
-        // Fonction pour mettre en majuscule la première lettre d'un mot
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+<h2>Lexique numérique participatif</h2>
+<h3>Cliquez sur la lettre pour découvrir les définitions correspondantes :</h3> <!-- Sous-titre ajouté -->
+
+<div class="alphabet-bar">
+    <button class="search-btn" data-column="A">A</button>
+    <button class="search-btn" data-column="B">B</button>
+    <button class="search-btn" data-column="C">C</button>
+    <button class="search-btn" data-column="D">D</button>
+    <button class="search-btn" data-column="E">E</button>
+    <button class="search-btn" data-column="F">F</button>
+    <button class="search-btn" data-column="G">G</button>
+    <button class="search-btn" data-column="H">H</button>
+    <button class="search-btn" data-column="I">I</button>
+    <button class="search-btn" data-column="J">J</button>
+    <button class="search-btn" data-column="K">K</button>
+    <button class="search-btn" data-column="L">L</button>
+    <button class="search-btn" data-column="M">M</button>
+    <button class="search-btn" data-column="N">N</button>
+    <button class="search-btn" data-column="O">O</button>
+    <button class="search-btn" data-column="P">P</button>
+    <button class="search-btn" data-column="Q">Q</button>
+    <button class="search-btn" data-column="R">R</button>
+    <button class="search-btn" data-column="S">S</button>
+    <button class="search-btn" data-column="T">T</button>
+    <button class="search-btn" data-column="U">U</button>
+    <button class="search-btn" data-column="V">V</button>
+    <button class="search-btn" data-column="W">W</button>
+    <button class="search-btn" data-column="X">X</button>
+    <button class="search-btn" data-column="Y">Y</button>
+    <button class="search-btn" data-column="Z">Z</button>
+    <button class="search-btn" data-column="all">Tout</button>
+</div>
+
+<table id="data-table">
+    <thead>
+        <tr>
+            <th>Définitions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Les données de la feuille s'afficheront ici -->
+    </tbody>
+</table>
+
+<script>
+    const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw';
+    const API_KEY = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE';
+    const RANGE = 'Lexique!A1:Z100'; // Ajustez la plage selon vos besoins
+
+    $(document).ready(function() {
+        // Fonction pour récupérer les données de la Google Sheet
+        function fetchData() {
+            return $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`);
         }
 
-        // Fonction pour exécuter la recherche
-        function executeSearch() {
-            const searchTerm = $('#search').val().toLowerCase().trim();
-            $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Lexique?key=${API_KEY}`, function(data) {
-                const rows = data.values || [];
-                const results = [];
+        // Événement pour la barre de recherche
+        $('.search-btn').on('click', function() {
+            const column = $(this).data('column');
+            fetchData().then(data => {
+                const rows = data.values;
+                $('#data-table tbody').empty(); // Effacer le tableau précédent
 
-                // Parcourir chaque ligne
-                rows.forEach(row => {
-                    row.forEach(cell => {
-                        if (cell) {
-                            const cellContent = cell.toLowerCase();
-                            const wordBeforeColon = cellContent.split(':')[0].trim();
+                if (rows && rows.length > 0) {
+                    const seen = new Set(); // Pour stocker les valeurs déjà affichées
 
-                            // Vérifier si le terme de recherche correspond à un mot entier ou à une combinaison de mots
-                            const words = wordBeforeColon.split(' ');
-                            if (searchTerm.split(' ').every(term => words.includes(term))) {
-                                // Mettre en majuscule la première lettre du premier mot
-                                const formattedWordBeforeColon = wordBeforeColon.split(' ').map((word, index) => {
-                                    return index === 0 ? capitalizeFirstLetter(word) : word;
-                                }).join(' ');
-
-                                // Diviser le contenu avant et après les deux-points
-                                const afterColon = cellContent.split(':')[1] || '';
-                                const formattedResult = `<span class="result-bold">${formattedWordBeforeColon}</span> : ${afterColon.trim()}`;
-                                results.push(formattedResult);
+                    if (column === 'all') {
+                        // Affiche toutes les valeurs de chaque colonne dans l'ordre
+                        for (let colIndex = 0; colIndex < rows[0].length; colIndex++) {
+                            for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                                const value = rows[rowIndex][colIndex]; // Récupère la valeur de la cellule (ex: A1, B1, etc.)
+                                
+                                // Vérifie si la valeur a déjà été affichée
+                                if (value && !seen.has(value)) {
+                                    const wordHTML = value.includes(':') ? value.replace(/(.*?:)/, '<strong>$1</strong>') : value;
+                                    const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
+                                    const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
+                                    $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
+                                    seen.add(value); // Ajoute la valeur à l'ensemble
+                                }
                             }
                         }
-                    });
-                });
+                    } else {
+                        const colIndex = column.charCodeAt(0) - 65; // Convertit la lettre en index (A=0, B=1, ...)
 
-                // Afficher les résultats ou un message d'inconnu
-                if (results.length > 0) {
-                    $('#results').html(results.join('<br><br>'));
+                        rows.forEach((row, rowIndex) => {
+                            const colValue = (row[colIndex] !== undefined ? row[colIndex] : ''); 
+
+                            // Vérifie si la valeur a déjà été affichée
+                            if (colValue && !seen.has(colValue)) {
+                                const wordHTML = colValue.includes(':') ? colValue.replace(/(.*?:)/, '<strong>$1</strong>') : colValue;
+                                const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
+                                const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
+                                $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
+                                seen.add(colValue); // Ajoute la valeur à l'ensemble
+                            }
+                        });
+                    }
                 } else {
-                    $('#results').html('<span class="unknown-message">Mot introuvable, n\'hésitez pas à l\'ajouter.</span>');
+                    $('#data-table tbody').append('<tr><td>Aucune donnée trouvée.</td></tr>');
                 }
-
-                // Vider la barre de recherche après l'affichage des résultats
-                $('#search').val('');
             });
-        }
-
-        // Écouteur d'événements pour le bouton de recherche
-        $('#searchBtn').click(function() {
-            executeSearch();
         });
+    });
+</script>
 
-        // Écouteur d'événements pour la touche "Entrée" dans le champ de recherche
-        $('#search').keydown(function(event) {
-            if (event.key === 'Enter') {
-                executeSearch();
-                event.preventDefault();
-            }
-        });
-    </script>
 </body>
 </html>
