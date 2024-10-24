@@ -56,9 +56,14 @@
             return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
         }
 
-        // Fonction pour supprimer les parenthèses, les virgules, les traits d'union, et normaliser les espaces
+        // Fonction pour supprimer les parenthèses, les virgules, normaliser les espaces et remplacer les traits d'union par des espaces
         function cleanString(string) {
-            return string.replace(/[(),-]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+            return string
+                .replace(/[(),]/g, '') // Supprime les parenthèses et les virgules
+                .replace(/-/g, ' ')     // Remplace les traits d'union par des espaces
+                .replace(/\s+/g, ' ')   // Normalise les espaces multiples
+                .trim()
+                .toLowerCase();         // Convertit en minuscules
         }
 
         // Fonction pour exécuter la recherche
