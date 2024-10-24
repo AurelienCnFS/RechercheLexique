@@ -76,8 +76,9 @@
                             const [beforeColon] = cell.split(':');
                             const cleanedBeforeColon = cleanString(beforeColon);
 
-                            // Vérifier si le terme de recherche est inclus avant les deux-points
-                            if (cleanedBeforeColon.includes(searchTerm)) {
+                            // Diviser en mots, et vérifier si l'un des mots correspond exactement au terme recherché
+                            const words = cleanedBeforeColon.split(' ');
+                            if (words.includes(searchTerm)) {
                                 // Formatage pour le résultat
                                 const formattedWordBeforeColon = beforeColon.split(' ').map((word, index) => {
                                     return index === 0 ? capitalizeFirstLetter(word) : word;
