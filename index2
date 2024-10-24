@@ -39,6 +39,11 @@
         /* Nouvelle taille pour le titre */
         h1 {
             font-size: 24px; /* Taille mise à 24 pixels */
+
+        /* Style pour le sous-titre */
+        h2 {
+            font-size: 18px; /* Taille pour le sous-titre */
+            margin-top: 5px; /* Espace au-dessus du sous-titre */
         }
     </style>
 </head>
