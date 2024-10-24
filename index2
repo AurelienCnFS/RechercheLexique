@@ -33,12 +33,15 @@
         .header-cell {
             background-color: #90EE90; /* Couleur verte pour la première ligne */
         }
+        .button-colored {
+            background-color: yellow; /* Couleur de fond pour les boutons cliqués */
+        }
     </style>
 </head>
 <body>
 
 <h2>Lexique numérique participatif</h2>
-<h3 style="font-weight: normal;">Cliquez sur une lettre pour découvrir les définitions correspondantes :</h3> <!-- Sous-titre ajouté -->
+<h3 style="font-weight: normal;">Cliquez sur la lettre pour découvrir les définitions correspondantes :</h3>
 
 <div class="alphabet-bar">
     <button class="search-btn" data-column="A">A</button>
@@ -95,6 +98,11 @@
         // Événement pour la barre de recherche
         $('.search-btn').on('click', function() {
             const column = $(this).data('column');
+            
+            // Colorer le bouton cliqué
+            $('.search-btn').removeClass('button-colored'); // Retire la couleur de tous les boutons
+            $(this).addClass('button-colored'); // Ajoute la couleur au bouton cliqué
+            
             fetchData().then(data => {
                 const rows = data.values;
                 $('#data-table tbody').empty(); // Effacer le tableau précédent
