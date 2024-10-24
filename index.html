@@ -56,14 +56,14 @@
             return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
         }
 
-        // Fonction pour supprimer seulement les parenthèses, sans toucher au contenu à l'intérieur
-        function removeParentheses(string) {
-            return string.replace(/[()]/g, '').trim(); // Supprimer uniquement les parenthèses
+        // Fonction pour supprimer les parenthèses, les virgules, les traits d'union, et normaliser les espaces
+        function cleanString(string) {
+            return string.replace(/[(),-]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
         }
 
         // Fonction pour exécuter la recherche
         function executeSearch() {
-            const searchTerm = removeParentheses($('#search').val().toLowerCase().trim());
+            const searchTerm = cleanString($('#search').val().trim());
             $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Lexique?key=${API_KEY}`, function(data) {
                 const rows = data.values || [];
                 const results = [];
@@ -72,19 +72,18 @@
                 rows.forEach(row => {
                     row.forEach(cell => {
                         if (cell) {
-                            const cellContent = removeParentheses(cell.toLowerCase());
-                            const wordBeforeColon = cellContent.split(':')[0].trim();
+                            // Prendre uniquement la partie avant les deux-points
+                            const [beforeColon] = cell.split(':');
+                            const cleanedBeforeColon = cleanString(beforeColon);
 
-                            // Vérifier si le terme de recherche correspond à un mot entier ou à une combinaison de mots
-                            const words = wordBeforeColon.split(' ');
-                            if (searchTerm.split(' ').every(term => words.includes(term))) {
-                                // Mettre en majuscule la première lettre du premier mot
-                                const formattedWordBeforeColon = wordBeforeColon.split(' ').map((word, index) => {
+                            // Vérifier si le terme de recherche est inclus avant les deux-points
+                            if (cleanedBeforeColon.includes(searchTerm)) {
+                                // Formatage pour le résultat
+                                const formattedWordBeforeColon = beforeColon.split(' ').map((word, index) => {
                                     return index === 0 ? capitalizeFirstLetter(word) : word;
                                 }).join(' ');
 
-                                // Diviser le contenu avant et après les deux-points
-                                const afterColon = cellContent.split(':')[1] || '';
+                                const afterColon = cell.split(':')[1] || '';
                                 const formattedResult = `<span class="result-bold">${formattedWordBeforeColon}</span> : ${afterColon.trim()}`;
                                 results.push(formattedResult);
                             }
