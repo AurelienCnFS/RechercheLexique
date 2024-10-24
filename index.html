@@ -81,9 +81,11 @@
                             const [beforeColon] = cell.split(':');
                             const cleanedBeforeColon = cleanString(beforeColon);
 
-                            // Diviser en mots, et vérifier si l'un des mots correspond exactement au terme recherché
-                            const words = cleanedBeforeColon.split(' ');
-                            if (words.includes(searchTerm)) {
+                            // Diviser en mots, et vérifier si chaque mot du terme de recherche existe dans cleanedBeforeColon
+                            const searchWords = searchTerm.split(' ');
+                            const allWordsMatch = searchWords.every(term => cleanedBeforeColon.includes(term));
+
+                            if (allWordsMatch) {
                                 // Formatage pour le résultat
                                 const formattedWordBeforeColon = beforeColon.split(' ').map((word, index) => {
                                     return index === 0 ? capitalizeFirstLetter(word) : word;
