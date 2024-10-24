@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compteur Google Sheets</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Compteur de cellules non vides</h1>
+    <div id="count"></div>
+
+    <script>
+        const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw';
+        const API_KEY = 'AIzaSyDMdpfkeyCNGeR24WJPiNBj__E64kPrKhE';
+        
+        function countNonEmptyCells() {
+            const range = 'A2:Z1000'; // Utilise toutes les colonnes de A à Z et les lignes de 2 à 1000
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
+            
+            $.getJSON(url, function(data) {
+                if (data.values) {
+                    let count = 0;
+                    data.values.forEach(row => {
+                        row.forEach(cell => {
+                            if (cell) { // Vérifie si la cellule n'est pas vide
+                                count++;
+                            }
+                        });
+                    });
+                    $('#count').text(`Nombre de cellules non vides : ${count}`);
+                } else {
+                    $('#count').text('Aucune donnée trouvée.');
+                }
+            }).fail(function() {
+                $('#count').text('Erreur lors de la récupération des données.');
+            });
+        }
+
+        // Appel de la fonction pour compter les cellules non vides
+        countNonEmptyCells();
+    </script>
+</body>
+</html>
