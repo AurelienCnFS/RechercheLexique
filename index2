@@ -109,7 +109,7 @@
                                 
                                 // Vérifie si la valeur a déjà été affichée
                                 if (value && !seen.has(value)) {
-                                    const wordHTML = value.includes(':') ? value.replace(/(.*?:)/, '$1') : value;
+                                    const wordHTML = value.includes(':') ? value.replace(/(.*?:)/, '$1 ') : value; // Espace après le titre
                                     const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
                                     const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
                                     $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
@@ -125,7 +125,7 @@
 
                             // Vérifie si la valeur a déjà été affichée
                             if (colValue && !seen.has(colValue)) {
-                                const wordHTML = colValue.includes(':') ? colValue.replace(/(.*?:)/, '$1') : colValue;
+                                const wordHTML = colValue.includes(':') ? colValue.replace(/(.*?:)/, '$1 ') : colValue; // Espace après le titre
                                 const isHeaderRow = (rowIndex === 0); // Vérifie si c'est la première ligne
                                 const cellClass = isHeaderRow ? 'header-cell' : ''; // Ajoute la classe pour les cellules d'en-tête
                                 $('#data-table tbody').append(`<tr><td class="${cellClass}">${wordHTML}</td></tr>`);
