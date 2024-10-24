@@ -1,11 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compteur Google Sheets</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
 <body>
     <h1>Compteur de cellules non vides</h1>
     <div id="count"></div>
@@ -28,7 +22,7 @@
                             }
                         });
                     });
-                    $('#count').text(`Nombre de cellules non vides : ${count}`);
+                    $('#count').text(`Nombre de définitions actuelles : ${count}`);
                 } else {
                     $('#count').text('Aucune donnée trouvée.');
                 }
