@@ -81,9 +81,12 @@
                             const [beforeColon] = cell.split(':');
                             const cleanedBeforeColon = cleanString(beforeColon);
 
-                            // Diviser en mots, et vérifier si chaque mot du terme de recherche existe dans cleanedBeforeColon
+                            // Diviser le contenu avant les deux-points en mots
+                            const wordsBeforeColon = cleanedBeforeColon.split(' ');
+
+                            // Vérifier si chaque mot du terme de recherche correspond à un mot entier dans wordsBeforeColon
                             const searchWords = searchTerm.split(' ');
-                            const allWordsMatch = searchWords.every(term => cleanedBeforeColon.includes(term));
+                            const allWordsMatch = searchWords.every(term => wordsBeforeColon.includes(term));
 
                             if (allWordsMatch) {
                                 // Formatage pour le résultat
