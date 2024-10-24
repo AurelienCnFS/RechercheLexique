@@ -56,9 +56,14 @@
             return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
         }
 
+        // Fonction pour supprimer seulement les parenthèses, sans toucher au contenu à l'intérieur
+        function removeParentheses(string) {
+            return string.replace(/[()]/g, '').trim(); // Supprimer uniquement les parenthèses
+        }
+
         // Fonction pour exécuter la recherche
         function executeSearch() {
-            const searchTerm = $('#search').val().toLowerCase().trim();
+            const searchTerm = removeParentheses($('#search').val().toLowerCase().trim());
             $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Lexique?key=${API_KEY}`, function(data) {
                 const rows = data.values || [];
                 const results = [];
@@ -67,7 +72,7 @@
                 rows.forEach(row => {
                     row.forEach(cell => {
                         if (cell) {
-                            const cellContent = cell.toLowerCase();
+                            const cellContent = removeParentheses(cell.toLowerCase());
                             const wordBeforeColon = cellContent.split(':')[0].trim();
 
                             // Vérifier si le terme de recherche correspond à un mot entier ou à une combinaison de mots
