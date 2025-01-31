@@ -40,8 +40,8 @@
 </head>
 <body>
 
-<h2>Lexique numérique participatif</h2>
-<h3 style="font-weight: normal;">Cliquez sur une lettre pour découvrir les définitions correspondantes :</h3>
+<h2>Lexique numérique</h2>
+<h3 style="font-weight: normal;">Cliquez sur une lettre pour découvrir les définitions :</h3>
 
 <div class="alphabet-bar">
     <button class="search-btn" data-column="A">A</button>
@@ -76,7 +76,7 @@
 <table id="data-table">
     <thead>
         <tr>
-            <th>Définitions</th>
+            <th>Définitions ↓</th>
         </tr>
     </thead>
     <tbody>
