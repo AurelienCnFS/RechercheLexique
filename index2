@@ -6,6 +6,15 @@
     <title>Lexique numérique participatif</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-y: auto; /* Défilement vertical pour tout le corps de la page */
+            max-height: 100vh; /* Limite la hauteur totale de la page à la taille de la vue */
+            display: flex;
+            flex-direction: column;
+        }
         table {
             border-collapse: collapse;
             width: 100%;
@@ -20,6 +29,9 @@
         }
         .alphabet-bar {
             margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         .alphabet-bar button {
             margin: 2px;
@@ -35,6 +47,22 @@
         }
         .button-colored {
             background-color: yellow; /* Couleur de fond pour les boutons cliqués */
+        }
+        #data-table-container {
+            flex-grow: 1;
+            width: 100%;
+            padding-top: 20px;
+        }
+
+        /* Media query pour les écrans mobiles */
+        @media (max-width: 600px) {
+            .alphabet-bar button {
+                font-size: 80%; /* Ajuste la taille de la police des boutons sur mobile */
+                padding: 5px; /* Réduit un peu le padding pour gagner de la place */
+            }
+            table {
+                font-size: 14px; /* Réduit légèrement la taille de la police dans la table */
+            }
         }
     </style>
 </head>
@@ -73,16 +101,18 @@
     <button class="search-btn" data-column="all">Tout</button>
 </div>
 
-<table id="data-table">
-    <thead>
-        <tr>
-            <th>Définitions ↓</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Les données de la feuille s'afficheront ici -->
-    </tbody>
-</table>
+<div id="data-table-container">
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Définitions ↓</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Les données de la feuille s'afficheront ici -->
+        </tbody>
+    </table>
+</div>
 
 <script>
     const SHEET_ID = '1Y4zpeQJgkalrj32uYIF613sT-Nox5SHzXCduXCFEFTw';
